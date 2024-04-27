@@ -20,7 +20,7 @@ namespace Domain.Entities
         public string Description { get; set; }
 
         //Navigation
-        public List<FemaleCharacter> FemailCharacters { get; set; }
-        public List<MaleCharacter> MailCharacters { get; set; }
+        //public List<FemaleCharacter> FemailCharacters { get; set; }
+        //public List<MaleCharacter> MailCharacters { get; set; }
     }
 }

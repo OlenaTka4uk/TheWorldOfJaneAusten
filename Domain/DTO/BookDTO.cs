@@ -14,7 +14,7 @@ namespace Domain.DTO
         public string Title { get; set; }
         public int Year { get; set; }
         public string Description { get; set; }
-        public List<FemaleCharacter> FemailCharacters { get; set; }
-        public List<MaleCharacter> MaleCharacters { get; set; }
+        //public List<FemaleCharacter> FemailCharacters { get; set; }
+        //public List<MaleCharacter> MaleCharacters { get; set; }
     }
 }

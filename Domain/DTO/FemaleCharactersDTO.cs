@@ -11,8 +11,7 @@ namespace Domain.DTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Characteristic { get; set; }
-        public List<MaleCharacter> Relationships { get; set; }
+        public string Characteristic { get; set; }        
         public int BookId { get; set; }
     }
 }

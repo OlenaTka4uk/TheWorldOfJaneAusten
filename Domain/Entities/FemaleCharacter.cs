@@ -17,7 +17,6 @@ namespace Domain.Entities
         [MaxLength(60)]
         public string Name { get; set; }
         public string Characteristic { get; set; }
-        public List<MaleCharacter> Relationships { get; set; }
 
         [ForeignKey(nameof(Book))]
         public int BookId { get; set; }
