@@ -1,25 +1,18 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.DTO
 {
-    public class FemaleCharacter
+    public class FemaleCharactersDTO
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [Required]
-        [MaxLength(60)]
         public string Name { get; set; }
         public string Characteristic { get; set; }
         public List<MaleCharacter> Relationships { get; set; }
-
-        [ForeignKey(nameof(Book))]
         public int BookId { get; set; }
     }
 }
