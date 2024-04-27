@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "TheWorldOfJaneAustenAPI\UI.csproj", "{706DCB4A-2273-4982-BAFF-938331116B61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{A340394B-7882-49BE-8444-451DABDCE363}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistense", "Persistense\Persistense.csproj", "{90598B44-8AB8-42FD-912B-ECDDD17C3102}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{706DCB4A-2273-4982-BAFF-938331116B61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{706DCB4A-2273-4982-BAFF-938331116B61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{706DCB4A-2273-4982-BAFF-938331116B61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{706DCB4A-2273-4982-BAFF-938331116B61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A340394B-7882-49BE-8444-451DABDCE363}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A340394B-7882-49BE-8444-451DABDCE363}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A340394B-7882-49BE-8444-451DABDCE363}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A340394B-7882-49BE-8444-451DABDCE363}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90598B44-8AB8-42FD-912B-ECDDD17C3102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90598B44-8AB8-42FD-912B-ECDDD17C3102}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90598B44-8AB8-42FD-912B-ECDDD17C3102}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90598B44-8AB8-42FD-912B-ECDDD17C3102}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E8127540-B28F-405C-804C-94A0F6D6C492}
+	EndGlobalSection
+EndGlobal
