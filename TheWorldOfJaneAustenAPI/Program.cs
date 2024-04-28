@@ -1,9 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Persistense.Data;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
+            .WriteTo.File("log/austenlog.txt", rollingInterval: RollingInterval.Day).CreateLogger();
+builder.Host.UseSerilog();
 
 builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 {
