@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Persistense.Data;
 
@@ -15,6 +16,15 @@ namespace UI.Controllers
         {
             _db = db;
             _logger = logger;
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<BookDTO>> GetAllBooks()
+        {
+            _logger.LogInformation("Get all books");
+
+            return Ok(_db.Books);
         }
     }
 }

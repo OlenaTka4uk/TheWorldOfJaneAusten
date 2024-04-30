@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Persistense.Data;
 
@@ -15,6 +16,14 @@ namespace UI.Controllers
         {
             _logger = logger;
             _db = db;
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<FemaleCharactersDTO>> GetAllFemaleCharacters()
+        {
+            _logger.LogInformation("Get all female characters");
+            return Ok(_db.FemaleCharacters);
         }
     }
 }
