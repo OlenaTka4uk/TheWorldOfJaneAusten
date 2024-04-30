@@ -10,11 +10,9 @@ namespace Domain.Entities
 {
     public class Book
     {
-        [Key]
+        
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [Required]
-        [MaxLength(100)]
         public string Title { get; set; }
         public int Year { get; set; }
         public string Description { get; set; }
