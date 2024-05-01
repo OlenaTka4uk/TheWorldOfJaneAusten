@@ -25,5 +25,53 @@ namespace UI.Controllers
             _logger.LogInformation("Get all male characters");
             return Ok(_db.MaleCharacters);
         }
+
+
+        [HttpGet("{id:int}", Name = "GetMaleCharById")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<MaleCharactersDTO> GetMaleCharactersById(int id)
+        {
+            if (id == 0)
+            {
+                _logger.LogError("Id can not be zero");
+                return BadRequest();
+            }
+
+            var maleCharacter = _db.MaleCharacters.FirstOrDefault(x => x.Id == id);
+
+            if (maleCharacter == null)
+            {
+                _logger.LogError($"{maleCharacter} has not found.");
+                return NotFound();
+            }
+
+            return Ok(maleCharacter);
+        }
+
+
+        [HttpGet("name:string", Name = "GetMaleCharByName")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<MaleCharactersDTO> GetMaleCharacterByName(string name)
+        {
+            if (name == "")
+            {
+                _logger.LogError("The name can not be empty");
+                return BadRequest();
+            }
+
+            var maleCharacter = _db.MaleCharacters.FirstOrDefault(x => x.Name == name);
+
+            if (maleCharacter == null)
+            {
+                _logger.LogError($"{maleCharacter} isn't exist");
+                return NotFound();
+            }
+
+            return Ok(maleCharacter);
+        }
     }
 }
