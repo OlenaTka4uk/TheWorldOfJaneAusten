@@ -111,5 +111,28 @@ namespace UI.Controllers
             return CreatedAtRoute("GetOneCharById", new { id = femaleCharactersDTO.Id }, femaleCharactersDTO);
         }
 
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult DeleteFemaleCharacter(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+
+            var femaleCharacter = _db.FemaleCharacters.FirstOrDefault(x => x.Id == id);
+
+            if (femaleCharacter == null)
+            {
+                return BadRequest(femaleCharacter);
+            }
+
+            _db.FemaleCharacters.Remove(femaleCharacter);
+            _db.SaveChanges();
+
+            return NoContent();
+        }
+
     }
 }

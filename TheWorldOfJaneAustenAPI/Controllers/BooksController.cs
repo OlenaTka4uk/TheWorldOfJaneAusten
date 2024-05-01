@@ -112,5 +112,28 @@ namespace UI.Controllers
 
             return CreatedAtRoute("GetOneBook", new { id = bookDTO.Id }, bookDTO);
         }
+
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult DeleteBook(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+
+            var book = _db.Books.FirstOrDefault(x => x.Id == id);
+
+            if (book == null)
+            {
+                return BadRequest();
+            }
+
+            _db.Books.Remove(book);
+            _db.SaveChanges();
+
+            return NoContent();
+        }
     }
 }

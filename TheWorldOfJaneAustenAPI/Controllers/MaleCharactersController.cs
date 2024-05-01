@@ -113,5 +113,29 @@ namespace UI.Controllers
             return CreatedAtRoute("GetMaleCharById", new { id = maleCharactersDTO.Id }, maleCharactersDTO);
 
         }
+
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult DeleteMaleCharacter(int id) 
+        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+
+            var maleCharacter = _db.MaleCharacters.FirstOrDefault(x => x.Id == id);
+
+            if (maleCharacter == null)
+            {
+                return BadRequest(maleCharacter);
+            }
+
+            _db.MaleCharacters.Remove(maleCharacter);
+            _db.SaveChanges();
+
+            return NoContent();
+        }
+
     }
 }
