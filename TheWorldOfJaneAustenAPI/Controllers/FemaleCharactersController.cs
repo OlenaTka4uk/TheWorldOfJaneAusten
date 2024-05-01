@@ -1,4 +1,5 @@
 ﻿using Domain.DTO;
+using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Persistense.Data;
@@ -72,5 +73,43 @@ namespace UI.Controllers
 
             return Ok(femaleCharacter);
         }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<FemaleCharactersDTO> CreateFemaleCharacter([FromBody] FemaleCharactersDTO femaleCharactersDTO) 
+        { 
+            if (_db.FemaleCharacters.FirstOrDefault(x => x.Name.ToLower() == femaleCharactersDTO.Name.ToLower()) != null)
+            {
+                _logger.LogError($"{femaleCharactersDTO.Name} is exist");
+                return BadRequest();
+            }        
+
+            if (femaleCharactersDTO == null)
+            {
+                _logger.LogError("This character is nor exist");
+                return NotFound(femaleCharactersDTO);
+            }
+            if (femaleCharactersDTO.Id > 0)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            FemaleCharacter model = new ()
+            {
+                Id = femaleCharactersDTO.Id,
+                Name = femaleCharactersDTO.Name,
+                BookId = femaleCharactersDTO.BookId,
+                Characteristic = femaleCharactersDTO.Characteristic
+            };
+
+            _db.FemaleCharacters.Add(model);
+            _db.SaveChanges();
+
+            return CreatedAtRoute("GetOneCharById", new { id = femaleCharactersDTO.Id }, femaleCharactersDTO);
+        }
+
     }
 }

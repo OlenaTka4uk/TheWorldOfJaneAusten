@@ -1,4 +1,5 @@
 ﻿using Domain.DTO;
+using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Persistense.Data;
@@ -70,6 +71,46 @@ namespace UI.Controllers
             }
 
             return Ok(book);
+        }
+
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<BookDTO> CreateBook([FromBody] BookDTO bookDTO)
+        {
+            if (_db.Books.FirstOrDefault(x => x.Title.ToLower() == bookDTO.Title.ToLower()) != null)
+            {
+                _logger.LogError("This book is already exist!");
+                return BadRequest();
+            }
+
+            if (bookDTO == null)
+            {
+                _logger.LogError($"{bookDTO} is not found");
+                return NotFound(bookDTO);
+            }
+
+            if (bookDTO.Id > 0)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            Book model = new()
+            { 
+                
+                Id = bookDTO.Id,      
+                Title = bookDTO.Title,
+                Year = bookDTO.Year,
+                Description = bookDTO.Description            
+            };
+
+            _db.Books.Add(model);
+            _db.SaveChanges();
+
+            return CreatedAtRoute("GetOneBook", new { id = bookDTO.Id }, bookDTO);
         }
     }
 }

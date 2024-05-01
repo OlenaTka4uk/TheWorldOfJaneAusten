@@ -1,4 +1,5 @@
 ﻿using Domain.DTO;
+using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Persistense.Data;
@@ -72,6 +73,45 @@ namespace UI.Controllers
             }
 
             return Ok(maleCharacter);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<MaleCharacter> CreateMaleCharacter([FromBody] MaleCharactersDTO maleCharactersDTO)
+        {
+            if (_db.MaleCharacters.FirstOrDefault(x => x.Name.ToLower() == maleCharactersDTO.Name.ToLower()) != null)
+            {
+                _logger.LogError($"{maleCharactersDTO} is exist");
+                return BadRequest();
+            }
+
+            if (maleCharactersDTO == null)
+            {
+                _logger.LogError($"{maleCharactersDTO} is not exist");
+                return NotFound();
+            }
+
+            if (maleCharactersDTO.Id > 0)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+            MaleCharacter model = new ()
+            { 
+                Id = maleCharactersDTO.Id,
+                Name = maleCharactersDTO.Name,
+                BookId = maleCharactersDTO.BookId,
+                Characteristic = maleCharactersDTO.Characteristic
+            };
+
+            _db.MaleCharacters.Add(model);
+            _db.SaveChanges();
+
+            return CreatedAtRoute("GetMaleCharById", new { id = maleCharactersDTO.Id }, maleCharactersDTO);
+
         }
     }
 }
