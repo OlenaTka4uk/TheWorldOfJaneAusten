@@ -135,5 +135,28 @@ namespace UI.Controllers
 
             return NoContent();
         }
+
+        [HttpPut("{id:int}", Name = "UpdateBook")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdateBook(int id, [FromBody] BookDTO bookDTO)
+        {
+            if (id == 0 || bookDTO == null)
+            {
+                _logger.LogError("Wrong data");
+                return BadRequest();
+            }
+
+            var book = _db.Books.FirstOrDefault(x => x.Id == id);
+            book.Id = bookDTO.Id;
+            book.Title = bookDTO.Title;
+            book.Year = bookDTO.Year;
+            book.Description = bookDTO.Description;
+
+            _db.Books.Update(book);
+            _db.SaveChanges();
+
+            return NoContent();
+        }
     }
 }

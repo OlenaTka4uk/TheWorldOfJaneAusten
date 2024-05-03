@@ -137,5 +137,27 @@ namespace UI.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id:int}", Name = "UpdateMaleCharacter")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdateMaleCharacter(int id, [FromBody] MaleCharactersDTO maleCharactersDTO)
+        {
+            if (id == 0 || maleCharactersDTO == null) 
+            {
+                _logger.LogError("Wrong data");
+                return BadRequest();
+            }
+
+            var maleCharacter = _db.MaleCharacters.FirstOrDefault(x => x.Id == id);
+            maleCharacter.Id = maleCharactersDTO.Id;
+            maleCharacter.Name = maleCharactersDTO.Name;
+            maleCharacter.Characteristic = maleCharactersDTO.Characteristic;
+            maleCharacter.BookId = maleCharactersDTO.BookId;
+
+            _db.MaleCharacters.Update(maleCharacter);
+            _db.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
