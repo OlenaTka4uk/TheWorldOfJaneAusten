@@ -1,7 +1,9 @@
 ﻿using Domain.DTO;
 using Domain.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Persistense.Data;
 
 namespace UI.Controllers
@@ -157,6 +159,53 @@ namespace UI.Controllers
             _db.MaleCharacters.Update(maleCharacter);
             _db.SaveChanges();
 
+            return NoContent();
+        }
+
+        [HttpPatch("{id:int}", Name = "UpdatePartialMaleCharacter")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdatePartialMaleCharacter(int id, JsonPatchDocument<MaleCharactersDTO> patchDTO)
+        {
+            if (id == 0 || patchDTO == null)
+            {
+                _logger.LogError("Wrong data");
+                return BadRequest();
+            }
+
+            var maleCharacter = _db.MaleCharacters.AsNoTracking().FirstOrDefault(x => x.Id == id);
+
+            if (maleCharacter == null)
+            {
+                _logger.LogError($"{maleCharacter} has not fount");
+                return BadRequest(maleCharacter);
+            }
+
+            MaleCharactersDTO maleCharacterDTO = new()
+            {
+                Id = maleCharacter.Id,
+                Name = maleCharacter.Name,
+                Characteristic = maleCharacter.Characteristic,
+                BookId = maleCharacter.BookId
+            };
+
+            patchDTO.ApplyTo(maleCharacterDTO, ModelState);
+
+            MaleCharacter model = new MaleCharacter()
+            {
+                Id = maleCharacterDTO.Id,
+                Name = maleCharacterDTO.Name,
+                Characteristic = maleCharacterDTO.Characteristic,
+                BookId = maleCharacterDTO.BookId
+            };
+
+            _db.MaleCharacters.Update(model);
+            _db.SaveChanges();
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             return NoContent();
         }
     }

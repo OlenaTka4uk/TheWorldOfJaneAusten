@@ -1,7 +1,9 @@
 ﻿using Domain.DTO;
 using Domain.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Persistense.Data;
 
 namespace UI.Controllers
@@ -154,6 +156,53 @@ namespace UI.Controllers
             _db.FemaleCharacters.Update(femaleCharacter);
             _db.SaveChanges();
 
+            return NoContent();
+        }
+
+        [HttpPatch("{id:int}", Name = "UpdatePartialFemaleCharacter")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdatePartialFemaleCharacter(int id, JsonPatchDocument<FemaleCharactersDTO> patchDTO)
+        {
+            if (id == 0 || patchDTO == null)
+            {
+                _logger.LogError("Wrong data");
+                return BadRequest();
+            }
+
+            var femaleCharacter = _db.FemaleCharacters.AsNoTracking().FirstOrDefault(x => x.Id == id);
+
+            if (femaleCharacter == null)
+            {
+                _logger.LogError($"{femaleCharacter} has not fount");
+                return BadRequest(femaleCharacter);
+            }
+
+            FemaleCharactersDTO fenaleCharacterDTO = new ()
+            {                 
+                Id = femaleCharacter.Id,
+                Characteristic = femaleCharacter.Characteristic,
+                BookId = femaleCharacter.BookId,
+                Name = femaleCharacter.Name
+            };
+
+            patchDTO.ApplyTo(fenaleCharacterDTO, ModelState);
+
+            FemaleCharacter model = new FemaleCharacter()
+            {
+                Id = fenaleCharacterDTO.Id,
+                Characteristic = fenaleCharacterDTO.Characteristic,
+                Name = fenaleCharacterDTO.Name,
+                BookId = fenaleCharacterDTO.BookId
+            };
+
+            _db.FemaleCharacters.Update(model);
+            _db.SaveChanges();
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             return NoContent();
         }
     }

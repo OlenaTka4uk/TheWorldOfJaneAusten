@@ -1,7 +1,10 @@
-﻿using Domain.DTO;
+﻿using Azure;
+using Domain.DTO;
 using Domain.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Persistense.Data;
 
 namespace UI.Controllers
@@ -155,6 +158,52 @@ namespace UI.Controllers
 
             _db.Books.Update(book);
             _db.SaveChanges();
+
+            return NoContent();
+        }
+
+        [HttpPatch("{id:int}", Name = "UpdatePartialBook")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdatePartialBook(int id, JsonPatchDocument<BookDTO> patchDTO)
+        {
+            if (id == 0 || patchDTO == null)
+            {
+                _logger.LogError("Wrong data");
+                return BadRequest();
+            }
+            var book = _db.Books.AsNoTracking().FirstOrDefault(x => x.Id == id);
+            
+            if (book == null)
+            {
+                _logger.LogError($"{book} has not found");
+                return BadRequest(book);
+            }
+
+            BookDTO bookDTO = new()
+            {                
+                Id = book.Id,
+                Title = book.Title,
+                Description = book.Description,
+                Year = book.Year
+            };
+            patchDTO.ApplyTo(bookDTO, ModelState);
+                      
+            Book model = new Book()
+            {
+                Id = bookDTO.Id,
+                Title = bookDTO.Title,
+                Description = bookDTO.Description,
+                Year = bookDTO.Year
+            };
+
+            _db.Books.Update(model);
+            _db.SaveChanges();
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             return NoContent();
         }
